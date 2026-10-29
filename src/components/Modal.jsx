@@ -15,7 +15,7 @@ function Modal({ title, onClose, className = 'max-w-md', children }) {
       onClick={onClose}
     >
       <div
-        className={`w-full rounded bg-white p-6 shadow-lg ${className}`}
+        className={`max-h-[90vh] w-full overflow-y-auto rounded bg-white p-6 shadow-lg ${className}`}
         role="dialog"
         aria-modal="true"
         aria-label={title}

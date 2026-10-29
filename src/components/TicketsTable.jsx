@@ -9,8 +9,9 @@ import ErrorMessage from './ErrorMessage'
 import Pagination from './Pagination'
 import Spinner from './Spinner'
 import TicketDetailModal from './TicketDetailModal'
+import TicketFormModal from './TicketFormModal'
 
-const buildColumns = ({ onView, onDelete }) => [
+const buildColumns = ({ onView, onEdit, onDelete }) => [
   { header: 'Code', render: (ticket) => ticket.code },
   { header: 'Date', render: (ticket) => formatDate(ticket.date) },
   { header: 'Supplier', render: (ticket) => ticket.Supplier.name },
@@ -26,7 +27,7 @@ const buildColumns = ({ onView, onDelete }) => [
     render: (ticket) => (
       <div className="flex justify-end gap-2">
         <Button onClick={() => onView(ticket)}>View</Button>
-        <Button>Edit</Button>
+        <Button onClick={() => onEdit(ticket)}>Edit</Button>
         <Button variant="danger" onClick={() => onDelete(ticket)}>
           Delete
         </Button>
@@ -39,12 +40,19 @@ function TicketsTable() {
   const [page, setPage] = useState(1)
   const [ticketToView, setTicketToView] = useState(null)
   const [ticketToDelete, setTicketToDelete] = useState(null)
+  // null = form closed; { ticketId: null } = new ticket; { ticketId: 5 } = edit ticket 5
+  const [form, setForm] = useState(null)
   const { data, isLoading, error } = useTickets(page)
   const deleteMutation = useDeleteTicket()
 
   // The state setters never change, so the columns are built only once
   const columns = useMemo(
-    () => buildColumns({ onView: setTicketToView, onDelete: setTicketToDelete }),
+    () =>
+      buildColumns({
+        onView: setTicketToView,
+        onEdit: (ticket) => setForm({ ticketId: ticket.id }),
+        onDelete: setTicketToDelete,
+      }),
     [],
   )
 
@@ -68,6 +76,11 @@ function TicketsTable() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end">
+        <Button variant="primary" onClick={() => setForm({ ticketId: null })}>
+          New ticket
+        </Button>
+      </div>
       <DataTable
         columns={columns}
         rows={data.data}
@@ -79,6 +92,9 @@ function TicketsTable() {
         totalPages={data.pagination.totalPages}
         onPageChange={setPage}
       />
+      {form && (
+        <TicketFormModal ticketId={form.ticketId} onClose={() => setForm(null)} />
+      )}
       {ticketToView && (
         <TicketDetailModal
           ticketId={ticketToView.id}
