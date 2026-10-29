@@ -14,8 +14,8 @@ import TicketFormModal from './TicketFormModal'
 const buildColumns = ({ onView, onEdit, onDelete }) => [
   { header: 'Code', render: (ticket) => ticket.code },
   { header: 'Date', render: (ticket) => formatDate(ticket.date) },
-  { header: 'Supplier', render: (ticket) => ticket.Supplier.name },
-  { header: 'Land', render: (ticket) => ticket.Land.name },
+  { header: 'Supplier', render: (ticket) => ticket.supplier.name },
+  { header: 'Land', render: (ticket) => ticket.land.name },
   {
     header: 'Total',
     className: 'text-right',

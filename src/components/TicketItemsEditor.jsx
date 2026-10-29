@@ -5,7 +5,7 @@ import { inputClass } from '../utils/inputClass'
 import { blockInvalidKeys } from '../utils/numberInput'
 import FormField from './FormField'
 
-const EMPTY_ITEM = { product_id: '', quantity: '', price: '' }
+const EMPTY_ITEM = { productId: '', quantity: '', price: '' }
 
 function TicketItemsEditor({ control, register, errors, products }) {
   const { fields, append, remove } = useFieldArray({ control, name: 'items' })
@@ -22,10 +22,10 @@ function TicketItemsEditor({ control, register, errors, products }) {
           return (
             <div key={field.id} className="grid grid-cols-12 items-start gap-2">
               <div className="col-span-12 sm:col-span-5">
-                <FormField label="Product" error={itemErrors?.product_id?.message}>
+                <FormField label="Product" error={itemErrors?.productId?.message}>
                   <select
-                    className={inputClass(itemErrors?.product_id)}
-                    {...register(`items.${index}.product_id`, { valueAsNumber: true })}
+                    className={inputClass(itemErrors?.productId)}
+                    {...register(`items.${index}.productId`, { valueAsNumber: true })}
                   >
                     <option value="">Select...</option>
                     {products.map((product) => (

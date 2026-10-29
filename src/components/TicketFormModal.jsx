@@ -16,9 +16,9 @@ import TicketItemsEditor from './TicketItemsEditor'
 const EMPTY_VALUES = {
   code: '',
   date: '',
-  supplier_id: '',
-  land_id: '',
-  items: [{ product_id: '', quantity: '', price: '' }],
+  supplierId: '',
+  landId: '',
+  items: [{ productId: '', quantity: '', price: '' }],
 }
 
 // The API sends decimals as strings
@@ -27,10 +27,10 @@ const toFormValues = (ticket) =>
     ? {
         code: ticket.code,
         date: ticket.date,
-        supplier_id: ticket.supplier_id,
-        land_id: ticket.land_id,
-        items: ticket.TicketItems.map((item) => ({
-          product_id: item.product_id,
+        supplierId: ticket.supplierId,
+        landId: ticket.landId,
+        items: ticket.items.map((item) => ({
+          productId: item.productId,
           quantity: Number(item.quantity),
           price: Number(item.price),
         })),
@@ -75,10 +75,10 @@ function TicketForm({ ticket, onClose }) {
         <FormField label="Date" error={errors.date?.message}>
           <input type="date" className={inputClass(errors.date)} {...register('date')} />
         </FormField>
-        <FormField label="Supplier" error={errors.supplier_id?.message}>
+        <FormField label="Supplier" error={errors.supplierId?.message}>
           <select
-            className={inputClass(errors.supplier_id)}
-            {...register('supplier_id', { valueAsNumber: true })}
+            className={inputClass(errors.supplierId)}
+            {...register('supplierId', { valueAsNumber: true })}
           >
             <option value="">Select...</option>
             {suppliers.data.map((supplier) => (
@@ -88,10 +88,10 @@ function TicketForm({ ticket, onClose }) {
             ))}
           </select>
         </FormField>
-        <FormField label="Land" error={errors.land_id?.message}>
+        <FormField label="Land" error={errors.landId?.message}>
           <select
-            className={inputClass(errors.land_id)}
-            {...register('land_id', { valueAsNumber: true })}
+            className={inputClass(errors.landId)}
+            {...register('landId', { valueAsNumber: true })}
           >
             <option value="">Select...</option>
             {lands.data.map((land) => (

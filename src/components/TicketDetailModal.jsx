@@ -7,7 +7,7 @@ import Modal from './Modal'
 import Spinner from './Spinner'
 
 const itemColumns = [
-  { header: 'Product', render: (item) => `${item.Product.code} - ${item.Product.name}` },
+  { header: 'Product', render: (item) => `${item.product.code} - ${item.product.name}` },
   { header: 'Quantity', className: 'text-right', render: (item) => formatNumber(item.quantity) },
   { header: 'Price', className: 'text-right', render: (item) => formatCurrency(item.price) },
   {
@@ -38,13 +38,13 @@ function TicketDetailModal({ ticketId, onClose }) {
           <dl className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
             <Field label="Code" value={ticket.code} />
             <Field label="Date" value={formatDate(ticket.date)} />
-            <Field label="Supplier" value={ticket.Supplier.name} />
-            <Field label="Land" value={ticket.Land.name} />
+            <Field label="Supplier" value={ticket.supplier.name} />
+            <Field label="Land" value={ticket.land.name} />
           </dl>
           <DataTable
             caption={`Items of ticket ${ticket.code}`}
             columns={itemColumns}
-            rows={ticket.TicketItems}
+            rows={ticket.items}
             getRowKey={(item) => item.id}
             emptyMessage="This ticket has no items"
           />
