@@ -1,7 +1,9 @@
 import { request } from './client'
 
-export function getTickets(page = 1, limit = 20) {
-  return request(`/tickets?page=${page}&limit=${limit}`)
+// sort: 'date' | 'code' | 'id', order: 'asc' | 'desc'
+export function getTickets({ page = 1, limit = 20, sort = 'date', order = 'desc' } = {}) {
+  const params = new URLSearchParams({ page, limit, sort, order })
+  return request(`/tickets?${params}`)
 }
 
 export function getTicket(id) {

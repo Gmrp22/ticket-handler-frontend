@@ -12,8 +12,8 @@ import TicketDetailModal from './TicketDetailModal'
 import TicketFormModal from './TicketFormModal'
 
 const buildColumns = ({ onView, onEdit, onDelete }) => [
-  { header: 'Code', render: (ticket) => ticket.code },
-  { header: 'Date', render: (ticket) => formatDate(ticket.date) },
+  { header: 'Code', sortKey: 'code', render: (ticket) => ticket.code },
+  { header: 'Date', sortKey: 'date', render: (ticket) => formatDate(ticket.date) },
   { header: 'Supplier', render: (ticket) => ticket.supplier.name },
   { header: 'Land', render: (ticket) => ticket.land.name },
   {
@@ -47,11 +47,13 @@ const buildColumns = ({ onView, onEdit, onDelete }) => [
 
 function TicketsTable() {
   const [page, setPage] = useState(1)
+  // Same default as the API: newest first
+  const [sort, setSort] = useState({ key: 'date', order: 'desc' })
   const [ticketToView, setTicketToView] = useState(null)
   const [ticketToDelete, setTicketToDelete] = useState(null)
   // null = form closed; { ticketId: null } = new ticket; { ticketId: 5 } = edit ticket 5
   const [form, setForm] = useState(null)
-  const { data, isLoading, error } = useTickets(page)
+  const { data, isLoading, error } = useTickets({ page, sort: sort.key, order: sort.order })
   const deleteMutation = useDeleteTicket()
 
   // The state setters never change, so the columns are built only once
@@ -64,6 +66,16 @@ function TicketsTable() {
       }),
     [],
   )
+
+  // Same column again: flips the order. Another column: starts ascending.
+  // The order changes the pages, so it goes back to the first one.
+  const handleSort = (key) => {
+    setSort((current) => ({
+      key,
+      order: current.key === key && current.order === 'asc' ? 'desc' : 'asc',
+    }))
+    setPage(1)
+  }
 
   const closeDeleteDialog = () => {
     setTicketToDelete(null)
@@ -95,6 +107,8 @@ function TicketsTable() {
         columns={columns}
         rows={data.data}
         getRowKey={(ticket) => ticket.id}
+        sort={sort}
+        onSort={handleSort}
         emptyMessage="No tickets found"
       />
       <Pagination
