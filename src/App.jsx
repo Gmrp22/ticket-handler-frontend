@@ -1,9 +1,10 @@
 import Layout from './components/Layout'
+import TicketsTable from './components/TicketsTable'
 
 function App() {
   return (
     <Layout>
-      <p>Tickets</p>
+      <TicketsTable />
     </Layout>
   )
 }
