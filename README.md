@@ -12,6 +12,7 @@ The analysis and the decisions behind the project are in [docs/decisions.md](doc
 - `react-hook-form` and `zod` for the forms and their validation
 - `date-fns` for dates and ISO weeks
 - `pino` for logs
+- Vitest and React Testing Library for the tests
 
 ## Requirements
 
@@ -50,16 +51,29 @@ The analysis and the decisions behind the project are in [docs/decisions.md](doc
 | `npm run build` | Production build in `dist/` |
 | `npm run preview` | Serves the production build locally |
 | `npm run lint` | Checks the code with oxlint |
+| `npm test` | Runs the unit tests once |
+| `npm run test:watch` | Runs the unit tests again every time a file is saved |
 
 ## What it does
 
-- **Tickets:** paginated table (20 per page, newest first) with code, date, supplier, land and total.
+The page has three tabs.
+
+- **Tickets:** paginated table (20 per page) with code, date, supplier, land and total. It starts with the newest first, and the **Code** and **Date** headers sort it.
   - **View:** the detail of a ticket, with its items and subtotals.
   - **New ticket / Edit:** a form with supplier, land and a dynamic list of items. The total is shown while typing.
   - **Delete:** asks for confirmation first.
-- **Payments (bonus):** choose an ISO year and week and see what is paid to each supplier, with the tickets that make each payment. Each ticket can be opened to see its items.
+- **Payments (bonus):** choose an ISO year and week and see what is paid to each supplier, with the tickets that make each payment. Each ticket can be opened to see its items. The data of the test is from January and February 2023, so use for example week 3 of 2023; the current week has no tickets.
+- **Catalogs:** create, edit and delete **suppliers**, **lands** and **products**, with a sub-tab for each. The tables start sorted by name, and the **Code** and **Name** headers sort them. A record used in tickets cannot be deleted, and the message of the API is shown.
 
 The data is saved by the API in the database; the frontend keeps no data of its own.
+
+## Tests
+
+```bash
+npm test
+```
+
+They cover the validation rules, the helpers for dates and ISO weeks, the requests to the API (success, errors, `204`, network failure) and the main components (sortable table, pagination, modal with focus, form fields and the items of a ticket). More in [docs/decisions.md](docs/decisions.md).
 
 ## Project structure
 
@@ -70,13 +84,16 @@ src/
 ├── hooks/        react-query hooks on top of api/
 ├── schemas/      zod validation rules
 ├── utils/        Formatting, ISO week helpers and the logger
-├── App.jsx       Tabs (Tickets / Payments)
+├── test/         Setup of the tests
+├── App.jsx       Tabs (Tickets / Payments / Catalogs)
 └── main.jsx      Entry point
 ```
 
+The tests are next to the file they test (`week.js` and `week.test.js`).
+
 ## Not included
 
-- Create, edit and delete of suppliers, lands and products. They are only read, to fill the selects of the ticket form.
-- Sorting the tickets table from the interface (the API supports it).
+- Search or pagination in the lists of suppliers, lands and products. The selects of the ticket form show the full list, sorted by name.
+- Sorting the payments from the interface (they come sorted by supplier name).
 
 See [docs/decisions.md](docs/decisions.md) for the full list and the reasons.
