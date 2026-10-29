@@ -29,7 +29,14 @@ export async function request(path, { method = 'GET', body } = {}) {
   // DELETE answers 204 with no body
   if (response.status === 204) return null
 
-  const data = await response.json()
+  // A proxy or a crashed server can answer with something that is not JSON
+  let data
+  try {
+    data = await response.json()
+  } catch {
+    logger.error({ method, path, status: response.status }, 'response is not JSON')
+    throw new ApiError(response.status, 'Unexpected response from the server')
+  }
 
   if (!response.ok) {
     logger.warn({ method, path, status: response.status, error: data.error }, 'api error')
