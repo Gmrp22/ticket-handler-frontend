@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@layer base {
+  /* Visible keyboard focus on everything interactive */
+  :focus-visible {
+    outline: 3px solid #4338ca;
+    outline-offset: 2px;
+  }
+}
+
+/* Users who ask for less motion get no spinning */
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin {
+    animation: none;
+  }
+}

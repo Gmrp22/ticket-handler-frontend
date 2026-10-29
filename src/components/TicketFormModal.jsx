@@ -110,7 +110,7 @@ function TicketForm({ ticket, onClose }) {
         products={products.data}
       />
 
-      <p className="text-right text-sm">
+      <p className="text-right text-base text-gray-900">
         Total: <span className="font-semibold">{formatCurrency(total)}</span>
       </p>
 

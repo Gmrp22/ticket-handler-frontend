@@ -26,9 +26,18 @@ const buildColumns = ({ onView, onEdit, onDelete }) => [
     className: 'text-right',
     render: (ticket) => (
       <div className="flex justify-end gap-2">
-        <Button onClick={() => onView(ticket)}>View</Button>
-        <Button onClick={() => onEdit(ticket)}>Edit</Button>
-        <Button variant="danger" onClick={() => onDelete(ticket)}>
+        <Button size="sm" aria-label={`View ticket ${ticket.code}`} onClick={() => onView(ticket)}>
+          View
+        </Button>
+        <Button size="sm" aria-label={`Edit ticket ${ticket.code}`} onClick={() => onEdit(ticket)}>
+          Edit
+        </Button>
+        <Button
+          size="sm"
+          variant="dangerOutline"
+          aria-label={`Delete ticket ${ticket.code}`}
+          onClick={() => onDelete(ticket)}
+        >
           Delete
         </Button>
       </div>
@@ -82,6 +91,7 @@ function TicketsTable() {
         </Button>
       </div>
       <DataTable
+        caption="Tickets"
         columns={columns}
         rows={data.data}
         getRowKey={(ticket) => ticket.id}

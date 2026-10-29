@@ -10,7 +10,15 @@ const buildColumns = (onViewTicket) => [
   {
     header: 'Detail',
     className: 'text-right',
-    render: (ticket) => <Button onClick={() => onViewTicket(ticket.id)}>View</Button>,
+    render: (ticket) => (
+      <Button
+        size="sm"
+        aria-label={`View ticket ${ticket.code}`}
+        onClick={() => onViewTicket(ticket.id)}
+      >
+        View
+      </Button>
+    ),
   },
 ]
 
@@ -20,16 +28,21 @@ function SupplierPaymentCard({ payment, onViewTicket }) {
 
   return (
     <section className="mb-6">
-      <div className="mb-2 flex items-baseline justify-between">
-        <h2 className="font-semibold">
+      <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className="text-lg font-semibold text-gray-900">
           {payment.supplier.name}{' '}
-          <span className="text-sm font-normal text-gray-500">({payment.supplier.code})</span>
+          <span className="text-base font-normal text-gray-700">({payment.supplier.code})</span>
         </h2>
-        <p className="text-sm">
+        <p className="text-base text-gray-900">
           Payment: <span className="font-semibold">{formatCurrency(payment.total)}</span>
         </p>
       </div>
-      <DataTable columns={columns} rows={payment.tickets} getRowKey={(ticket) => ticket.id} />
+      <DataTable
+        caption={`Tickets paid to ${payment.supplier.name}`}
+        columns={columns}
+        rows={payment.tickets}
+        getRowKey={(ticket) => ticket.id}
+      />
     </section>
   )
 }

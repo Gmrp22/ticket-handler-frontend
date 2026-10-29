@@ -2,8 +2,8 @@ import Button from './Button'
 
 function Pagination({ page, totalPages, onPageChange }) {
   return (
-    <div className="flex items-center justify-between pt-4">
-      <span className="text-sm text-gray-600">
+    <nav aria-label="Pagination" className="flex items-center justify-between pt-4">
+      <span className="text-base text-gray-900" aria-live="polite">
         Page {page} of {totalPages}
       </span>
       <div className="flex gap-2">
@@ -14,7 +14,7 @@ function Pagination({ page, totalPages, onPageChange }) {
           Next
         </Button>
       </div>
-    </div>
+    </nav>
   )
 }
 

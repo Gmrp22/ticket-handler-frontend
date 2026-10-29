@@ -20,8 +20,8 @@ const itemColumns = [
 function Field({ label, value }) {
   return (
     <div>
-      <dt className="text-xs uppercase text-gray-500">{label}</dt>
-      <dd className="font-medium">{value}</dd>
+      <dt className="text-sm text-gray-700">{label}</dt>
+      <dd className="text-base font-medium text-gray-900">{value}</dd>
     </div>
   )
 }
@@ -35,19 +35,20 @@ function TicketDetailModal({ ticketId, onClose }) {
       {error && <ErrorMessage message={error.message} />}
       {ticket && (
         <>
-          <dl className="mb-4 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+          <dl className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
             <Field label="Code" value={ticket.code} />
             <Field label="Date" value={formatDate(ticket.date)} />
             <Field label="Supplier" value={ticket.Supplier.name} />
             <Field label="Land" value={ticket.Land.name} />
           </dl>
           <DataTable
+            caption={`Items of ticket ${ticket.code}`}
             columns={itemColumns}
             rows={ticket.TicketItems}
             getRowKey={(item) => item.id}
             emptyMessage="This ticket has no items"
           />
-          <p className="mt-4 text-right text-sm">
+          <p className="mt-4 text-right text-base text-gray-900">
             Total: <span className="font-semibold">{formatCurrency(ticket.total)}</span>
           </p>
         </>

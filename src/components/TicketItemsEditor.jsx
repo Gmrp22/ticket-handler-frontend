@@ -13,7 +13,7 @@ function TicketItemsEditor({ control, register, errors, products }) {
 
   return (
     <div>
-      <h3 className="mb-2 text-sm font-semibold">Items</h3>
+      <h3 className="mb-2 text-lg font-semibold text-gray-900">Items</h3>
       <div className="space-y-3">
         {fields.map((field, index) => {
           const itemErrors = errors.items?.[index]
@@ -60,12 +60,13 @@ function TicketItemsEditor({ control, register, errors, products }) {
                   />
                 </FormField>
               </div>
-              <div className="col-span-3 pt-7 text-right text-sm sm:col-span-2">
+              <div className="col-span-3 mt-7 flex h-10 items-center justify-end text-base text-gray-900 sm:col-span-2">
+                <span className="sr-only">Subtotal: </span>
                 {formatCurrency(Number.isNaN(subtotal) ? 0 : subtotal)}
               </div>
-              <div className="col-span-1 pt-6">
+              <div className="col-span-1 mt-7">
                 <Button
-                  aria-label="Remove item"
+                  aria-label={`Remove item ${index + 1}`}
                   disabled={fields.length === 1}
                   onClick={() => remove(index)}
                 >
@@ -77,7 +78,10 @@ function TicketItemsEditor({ control, register, errors, products }) {
         })}
       </div>
       {errors.items?.message && (
-        <p className="mt-2 text-xs text-red-600">{errors.items.message}</p>
+        <p className="mt-2 text-sm font-medium text-red-700">
+          <span aria-hidden="true">⚠ </span>
+          {errors.items.message}
+        </p>
       )}
       <Button className="mt-3" onClick={() => append(EMPTY_ITEM)}>
         + Add item

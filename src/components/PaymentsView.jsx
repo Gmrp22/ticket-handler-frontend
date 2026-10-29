@@ -24,11 +24,11 @@ function PaymentsView() {
         {error && <ErrorMessage message={error.message} />}
         {isValidWeek(year, week) && data && (
           <>
-            <p className="mb-4 text-right text-sm">
+            <p className="mb-4 text-right text-base text-gray-900">
               Total to pay: <span className="font-semibold">{formatCurrency(data.total)}</span>
             </p>
             {data.suppliers.length === 0 ? (
-              <p className="rounded border border-gray-200 bg-white px-4 py-8 text-center text-gray-500">
+              <p className="rounded-lg border border-gray-300 bg-white px-4 py-8 text-center text-base text-gray-700">
                 No payments this week
               </p>
             ) : (

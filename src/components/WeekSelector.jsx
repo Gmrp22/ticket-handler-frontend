@@ -57,7 +57,7 @@ function WeekSelector({ year, week, onChange }) {
           Next ›
         </Button>
       </div>
-      <p className="mt-2 text-sm text-gray-600">
+      <p className="mt-2 text-base text-gray-700" aria-live="polite">
         {isValid
           ? formatWeekRange(year, week)
           : 'Year must be between 1900 and 2100, and week between 1 and 53'}

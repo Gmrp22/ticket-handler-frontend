@@ -5,7 +5,7 @@ import Modal from './Modal'
 function ConfirmDialog({ title, message, confirmLabel = 'Confirm', isLoading, error, onConfirm, onCancel }) {
   return (
     <Modal title={title} onClose={onCancel}>
-      <p className="mb-4 text-sm text-gray-600">{message}</p>
+      <p className="mb-4 text-base text-gray-900">{message}</p>
       {error && (
         <div className="mb-4">
           <ErrorMessage message={error} />
