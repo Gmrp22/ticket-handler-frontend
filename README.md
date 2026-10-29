@@ -79,17 +79,19 @@ They cover the validation rules, the helpers for dates and ISO weeks, the reques
 
 ```
 src/
-├── api/          Requests to the API: a generic client and one module per resource
-├── components/   Screens and reusable pieces (tables, modals, forms)
-├── hooks/        react-query hooks on top of api/
-├── schemas/      zod validation rules
-├── utils/        Formatting, ISO week helpers and the logger
-├── test/         Setup of the tests
-├── App.jsx       Tabs (Tickets / Payments / Catalogs)
-└── main.jsx      Entry point
-```
+├── components/
+│   ├── ui/          Reusable pieces with no business logic (Button, DataTable, Modal...)
+│   └── layout/      The page layout
+├── features/        One folder per functionality
+│   ├── tickets/     components/, hooks/, api.js and schema.js
+│   ├── catalogs/    components/, hooks/, api.js, schema.js and constants.js
+│   └── payments/    components/, hooks/, api.js and week.js (ISO week helpers)
+├── lib/             Generic code: API client, logger and formatters
+├── App.jsx          Tabs (Tickets / Payments / Catalogs)
+└── main.jsx         Entry point
 
-The tests are next to the file they test (`week.js` and `week.test.js`).
+tests/               Same shape as src/ (components/ui, features/..., lib/) and the setup
+```
 
 ## Not included
 

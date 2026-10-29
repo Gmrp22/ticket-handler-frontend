@@ -1,0 +1,108 @@
+import { useMemo, useState } from 'react'
+import { useCatalog } from '@/features/catalogs/hooks/useCatalog'
+import { useDeleteCatalogItem } from '@/features/catalogs/hooks/useDeleteCatalogItem'
+import Button from '@/components/ui/Button'
+import CatalogFormModal from './CatalogFormModal'
+import ConfirmDialog from '@/components/ui/ConfirmDialog'
+import DataTable from '@/components/ui/DataTable'
+import ErrorMessage from '@/components/ui/ErrorMessage'
+import Spinner from '@/components/ui/Spinner'
+
+const buildColumns = ({ singular, onEdit, onDelete }) => [
+  { header: 'Code', sortKey: 'code', render: (item) => item.code },
+  { header: 'Name', sortKey: 'name', render: (item) => item.name },
+  {
+    header: 'Actions',
+    className: 'text-right',
+    render: (item) => (
+      <div className="flex justify-end gap-2">
+        <Button size="sm" aria-label={`Edit ${singular} ${item.code}`} onClick={() => onEdit(item)}>
+          Edit
+        </Button>
+        <Button
+          size="sm"
+          variant="dangerOutline"
+          aria-label={`Delete ${singular} ${item.code}`}
+          onClick={() => onDelete(item)}
+        >
+          Delete
+        </Button>
+      </div>
+    ),
+  },
+]
+
+// catalog: one of CATALOGS (suppliers, lands or products)
+function CatalogTable({ catalog }) {
+  // null = form closed; { item: null } = new item; { item } = edit that item
+  const [form, setForm] = useState(null)
+  const [itemToDelete, setItemToDelete] = useState(null)
+  const [sort, setSort] = useState({ key: 'name', order: 'asc' })
+  const { data, isLoading, error } = useCatalog(catalog.id, { sort: sort.key, order: sort.order })
+  const deleteMutation = useDeleteCatalogItem(catalog.id)
+
+  const columns = useMemo(
+    () =>
+      buildColumns({
+        singular: catalog.singular,
+        onEdit: (item) => setForm({ item }),
+        onDelete: setItemToDelete,
+      }),
+    [catalog.singular],
+  )
+
+  // Same column again: flips the order. Another column: starts ascending.
+  const handleSort = (key) => {
+    setSort((current) => ({
+      key,
+      order: current.key === key && current.order === 'asc' ? 'desc' : 'asc',
+    }))
+  }
+
+  const closeDeleteDialog = () => {
+    setItemToDelete(null)
+    deleteMutation.reset()
+  }
+
+  const confirmDelete = () => {
+    deleteMutation.mutate(itemToDelete.id, { onSuccess: closeDeleteDialog })
+  }
+
+  if (isLoading) return <Spinner />
+  if (error) return <ErrorMessage message={error.message} />
+
+  return (
+    <>
+      <div className="mb-4 flex justify-end">
+        <Button variant="primary" onClick={() => setForm({ item: null })}>
+          New {catalog.singular}
+        </Button>
+      </div>
+      <DataTable
+        caption={catalog.label}
+        columns={columns}
+        rows={data}
+        getRowKey={(item) => item.id}
+        sort={sort}
+        onSort={handleSort}
+        emptyMessage={`No ${catalog.label.toLowerCase()} found`}
+      />
+      {form && (
+        <CatalogFormModal catalog={catalog} item={form.item} onClose={() => setForm(null)} />
+      )}
+      {itemToDelete && (
+        <ConfirmDialog
+          title={`Delete ${catalog.singular}`}
+          message={`${itemToDelete.code} - ${itemToDelete.name} will be deleted. This cannot be undone.`}
+          confirmLabel="Delete"
+          isLoading={deleteMutation.isPending}
+          error={deleteMutation.error?.message}
+          onConfirm={confirmDelete}
+          onCancel={closeDeleteDialog}
+        />
+      )}
+    </>
+  )
+}
+
+export default CatalogTable

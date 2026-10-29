@@ -57,7 +57,7 @@ What I found in the data and in the API (see `apidoc.md`) that the frontend has 
 - Tables have a hidden caption, and a sortable header tells its order with `aria-sort`. There is a "Skip to main content" link and `prefers-reduced-motion` is respected.
 
 ### Testing
-- Vitest with React Testing Library, which tests components the way a person uses them. The tests are next to the file they test, and the API is simulated, so no test needs the backend.
+- Vitest with React Testing Library, which tests components the way a person uses them. The tests are in a `tests/` folder with the same shape as `src/`, and the API is simulated, so no test needs the backend.
 - Covered: ISO week helpers, validation rules, requests to the API (success, errors, `204`, network failure, answers that are not JSON, sort in the URL) and the main components (sortable table, pagination, modal focus, form fields, items of a ticket, catalogs form and table).
 - Writing them found two real problems that were fixed: a server answer that is not JSON gave a raw syntax error, and a field error was read twice by screen readers.
 - Not covered: the hooks alone, `TicketsTable`, `TicketFormModal` and `PaymentsView`, only through the pieces they use.

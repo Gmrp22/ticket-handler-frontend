@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import CatalogsView from './components/CatalogsView'
-import Layout from './components/Layout'
-import PaymentsView from './components/PaymentsView'
-import Tabs from './components/Tabs'
-import TicketsTable from './components/TicketsTable'
+import CatalogsView from '@/features/catalogs/components/CatalogsView'
+import Layout from '@/components/layout/Layout'
+import PaymentsView from '@/features/payments/components/PaymentsView'
+import Tabs from '@/components/ui/Tabs'
+import TicketsTable from '@/features/tickets/components/TicketsTable'
 
 const TABS = [
   { id: 'tickets', label: 'Tickets' },
