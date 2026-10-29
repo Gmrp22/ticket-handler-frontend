@@ -33,7 +33,7 @@ What I found in the data and in the API (see `apidoc.md`) that the frontend has 
 - The table sorts by **Code** and **Date**, the two fields the API allows besides `id`. The sort is done by the API and not in the frontend, because the data is paginated: sorting only the 20 rows of a page would be wrong. Changing the sort goes back to page 1.
 - One form for create and edit. To edit, the full ticket is requested first, because the list has no items.
 - The form is validated with `zod` when the user presses Save, and each field is checked again while it is corrected. Errors from the API (for example a repeated code, `409`) are shown inside the modal.
-- `quantity` and `price` must be greater than 0, and the number inputs do not accept `-`, `+` or `e`. The API accepts 0 because the Excel has such lines, but for new data a line of 0 adds nothing. The consequence is that editing a ticket with a line of quantity 0 asks to change or remove that line.
+- `quantity` can be 0 and `price` must be greater than 0. The API accepts a quantity of 0 because the Excel has such lines, and the form must be able to save those tickets again when they are edited. A price of 0 has no use, so it is not accepted. Negative numbers are rejected, and the number inputs do not accept `-`, `+` or `e`.
 - The subtotals and the total of the form are only a preview while typing (`quantity x price`). The real total is the one the API calculates.
 - The form sends numbers, not text, and uses the same names as the API.
 

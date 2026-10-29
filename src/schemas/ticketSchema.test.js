@@ -56,12 +56,21 @@ describe('ticketSchema', () => {
     expect(errorsOf({ ...validTicket, code: '   ' })).toEqual(['code: Code is required'])
   })
 
-  it('does not accept zero or negative quantity and price', () => {
-    const items = [{ productId: 1, quantity: 0, price: -1 }]
-    expect(errorsOf({ ...validTicket, items })).toEqual([
-      'items.0.quantity: Must be greater than 0',
-      'items.0.price: Must be greater than 0',
-    ])
+  it('accepts a quantity of 0, because the Excel has lines like that', () => {
+    const items = [{ productId: 1, quantity: 0, price: 0.7 }]
+    expect(ticketSchema.safeParse({ ...validTicket, items }).success).toBe(true)
+  })
+
+  it('does not accept a negative quantity', () => {
+    const items = [{ productId: 1, quantity: -1, price: 0.7 }]
+    expect(errorsOf({ ...validTicket, items })).toEqual(['items.0.quantity: Cannot be negative'])
+  })
+
+  it('does not accept a price of 0 or less', () => {
+    const zero = [{ productId: 1, quantity: 1, price: 0 }]
+    const negative = [{ productId: 1, quantity: 1, price: -1 }]
+    expect(errorsOf({ ...validTicket, items: zero })).toEqual(['items.0.price: Must be greater than 0'])
+    expect(errorsOf({ ...validTicket, items: negative })).toEqual(['items.0.price: Must be greater than 0'])
   })
 
   it('needs at least one item', () => {
@@ -71,7 +80,7 @@ describe('ticketSchema', () => {
   it('points to the item that is wrong', () => {
     const items = [
       { productId: 1, quantity: 1, price: 1 },
-      { productId: 2, quantity: 1, price: 0 },
+      { productId: 2, quantity: 1, price: -1 },
     ]
     expect(errorsOf({ ...validTicket, items })).toEqual(['items.1.price: Must be greater than 0'])
   })

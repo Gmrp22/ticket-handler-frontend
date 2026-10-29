@@ -10,7 +10,8 @@ export const ticketSchema = z.object({
     .array(
       z.object({
         productId: z.number({ error: 'Select a product' }),
-        quantity: z.number({ error: 'Enter a quantity' }).positive('Must be greater than 0'),
+        // 0 is allowed, like the API: the Excel has lines with quantity 0
+        quantity: z.number({ error: 'Enter a quantity' }).min(0, 'Cannot be negative'),
         price: z.number({ error: 'Enter a price' }).positive('Must be greater than 0'),
       }),
     )
