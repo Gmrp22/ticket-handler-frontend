@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createTicket, updateTicket } from '@/features/tickets/api'
+import { createTicket, updateTicket } from '@/api/tickets'
 import { useToast } from '@/lib/toastContext'
 
 // Creates a ticket, or updates it when an id is given

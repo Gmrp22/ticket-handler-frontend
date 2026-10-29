@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createCatalogItem, deleteCatalogItem, getCatalog, updateCatalogItem } from '@/features/catalogs/api'
-import { request } from '@/lib/apiClient'
+import { createCatalogItem, deleteCatalogItem, getCatalog, updateCatalogItem } from '@/api/catalogs'
+import { request } from '@/api/client'
 
-vi.mock('@/lib/apiClient')
+vi.mock('@/api/client')
 
 describe('catalogs api', () => {
   beforeEach(() => {

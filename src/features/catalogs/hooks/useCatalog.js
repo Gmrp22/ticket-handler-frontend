@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { getCatalog } from '@/features/catalogs/api'
+import { getCatalog } from '@/api/catalogs'
 
 // With no sort the list comes by name, which is also the order of the selects of the forms
 export function useCatalog(resource, { sort = 'name', order = 'asc' } = {}) {

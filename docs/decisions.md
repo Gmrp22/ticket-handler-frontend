@@ -62,14 +62,6 @@ What I found in the data and in the API (see `apidoc.md`) that the frontend has 
 - Writing them found two real problems that were fixed: a server answer that is not JSON gave a raw syntax error, and a field error was read twice by screen readers.
 - Not covered: the hooks alone, `TicketsTable`, `TicketFormModal` and `PaymentsView`, only through the pieces they use.
 
-## Left for later
-- Search in the selects, see Catalogs.
-- A way to sort the payments from the interface (the API supports it).
-- Make Payments start in a week with data. It starts in the current week, and the data of the test is from 2023.
-- A check of the small screens: the table scrolls sideways and the items of the form may be tight on a phone.
-- Tests of the complete flows (create, edit and delete a ticket).
-- Filter by `code`, which the API does not have yet.
-
 ## Not added
 - A router, a UI library or a state library like Redux. The tabs, `react-query` and `useState` are enough.
 - `React.memo`, `useMemo` and `useCallback` by default. With 20 rows a render costs milliseconds. I only use `useMemo` where a stable reference is needed (the columns of the tables).

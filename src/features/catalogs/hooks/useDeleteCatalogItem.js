@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteCatalogItem } from '@/features/catalogs/api'
+import { deleteCatalogItem } from '@/api/catalogs'
 import { CATALOGS } from '@/features/catalogs/constants'
 import { useToast } from '@/lib/toastContext'
 

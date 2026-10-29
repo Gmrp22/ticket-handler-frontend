@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createCatalogItem, updateCatalogItem } from '@/features/catalogs/api'
+import { createCatalogItem, updateCatalogItem } from '@/api/catalogs'
 import { CATALOGS } from '@/features/catalogs/constants'
 import { useToast } from '@/lib/toastContext'
 

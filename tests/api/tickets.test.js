@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { request } from '@/lib/apiClient'
-import { createTicket, deleteTicket, getTicket, getTickets, updateTicket } from '@/features/tickets/api'
+import { request } from '@/api/client'
+import { createTicket, deleteTicket, getTicket, getTickets, updateTicket } from '@/api/tickets'
 
-vi.mock('@/lib/apiClient')
+vi.mock('@/api/client')
 
 describe('tickets api', () => {
   beforeEach(() => {

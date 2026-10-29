@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getTicket } from '@/features/tickets/api'
+import { getTicket } from '@/api/tickets'
 
 // With no id (creating a ticket) nothing is requested
 export function useTicket(id) {

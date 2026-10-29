@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { getTickets } from '@/features/tickets/api'
+import { getTickets } from '@/api/tickets'
 
 export function useTickets({ page, sort, order }) {
   return useQuery({

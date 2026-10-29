@@ -1,4 +1,4 @@
-import { request } from '@/lib/apiClient'
+import { request } from './client'
 
 // resource: 'suppliers' | 'lands' | 'products' (same shape and endpoints)
 // sort: 'id' | 'code' | 'name', order: 'asc' | 'desc'. By name, because it is the easiest to read.

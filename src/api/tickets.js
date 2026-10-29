@@ -1,4 +1,4 @@
-import { request } from '@/lib/apiClient'
+import { request } from './client'
 
 // sort: 'date' | 'code' | 'id', order: 'asc' | 'desc'
 export function getTickets({ page = 1, limit = 20, sort = 'date', order = 'desc' } = {}) {

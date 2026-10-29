@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteTicket } from '@/features/tickets/api'
+import { deleteTicket } from '@/api/tickets'
 import { useToast } from '@/lib/toastContext'
 
 export function useDeleteTicket() {

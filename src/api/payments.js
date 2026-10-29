@@ -1,4 +1,4 @@
-import { request } from '@/lib/apiClient'
+import { request } from './client'
 
 // year: ISO year, week: ISO week (1 to 53)
 export function getWeeklyPayments(year, week) {

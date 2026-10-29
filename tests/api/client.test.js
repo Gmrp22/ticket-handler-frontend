@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ApiError, request } from '@/lib/apiClient'
+import { ApiError, request } from '@/api/client'
 
 const respond = (status, body) => ({
   status,

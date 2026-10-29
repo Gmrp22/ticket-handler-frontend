@@ -2,12 +2,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createCatalogItem, updateCatalogItem } from '@/features/catalogs/api'
-import { ApiError } from '@/lib/apiClient'
+import { createCatalogItem, updateCatalogItem } from '@/api/catalogs'
+import { ApiError } from '@/api/client'
 import ToastProvider from '@/components/ui/ToastProvider'
 import CatalogFormModal from '@/features/catalogs/components/CatalogFormModal'
 
-vi.mock('@/features/catalogs/api')
+vi.mock('@/api/catalogs')
 
 const catalog = { id: 'suppliers', label: 'Suppliers', singular: 'supplier' }
 

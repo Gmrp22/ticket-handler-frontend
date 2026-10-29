@@ -2,11 +2,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { deleteCatalogItem, getCatalog } from '@/features/catalogs/api'
+import { deleteCatalogItem, getCatalog } from '@/api/catalogs'
 import ToastProvider from '@/components/ui/ToastProvider'
 import CatalogTable from '@/features/catalogs/components/CatalogTable'
 
-vi.mock('@/features/catalogs/api')
+vi.mock('@/api/catalogs')
 
 const catalog = { id: 'suppliers', label: 'Suppliers', singular: 'supplier' }
 const suppliers = [

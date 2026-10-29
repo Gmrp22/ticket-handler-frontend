@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { getWeeklyPayments } from '@/features/payments/api'
+import { getWeeklyPayments } from '@/api/payments'
 import { isValidWeek } from '@/features/payments/week'
 
 export function usePayments(year, week) {
