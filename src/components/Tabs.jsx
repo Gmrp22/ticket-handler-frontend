@@ -1,8 +1,8 @@
 // tabs: [{ id, label }]
 // The active one is marked with a bottom border and bold text, not only with color
-function Tabs({ tabs, active, onChange }) {
+function Tabs({ tabs, active, onChange, label = 'Main' }) {
   return (
-    <nav aria-label="Main" className="flex gap-2">
+    <nav aria-label={label} className="flex gap-2">
       {tabs.map((tab) => {
         const isActive = tab.id === active
         return (
