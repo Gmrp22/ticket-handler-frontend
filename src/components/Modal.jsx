@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-function Modal({ title, onClose, children }) {
+function Modal({ title, onClose, className = 'max-w-md', children }) {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') onClose()
@@ -15,7 +15,7 @@ function Modal({ title, onClose, children }) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded bg-white p-6 shadow-lg"
+        className={`w-full rounded bg-white p-6 shadow-lg ${className}`}
         role="dialog"
         aria-modal="true"
         aria-label={title}

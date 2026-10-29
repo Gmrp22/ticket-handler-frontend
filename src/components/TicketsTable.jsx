@@ -8,8 +8,9 @@ import DataTable from './DataTable'
 import ErrorMessage from './ErrorMessage'
 import Pagination from './Pagination'
 import Spinner from './Spinner'
+import TicketDetailModal from './TicketDetailModal'
 
-const buildColumns = (onDelete) => [
+const buildColumns = ({ onView, onDelete }) => [
   { header: 'Code', render: (ticket) => ticket.code },
   { header: 'Date', render: (ticket) => formatDate(ticket.date) },
   { header: 'Supplier', render: (ticket) => ticket.Supplier.name },
@@ -24,7 +25,7 @@ const buildColumns = (onDelete) => [
     className: 'text-right',
     render: (ticket) => (
       <div className="flex justify-end gap-2">
-        <Button>View</Button>
+        <Button onClick={() => onView(ticket)}>View</Button>
         <Button>Edit</Button>
         <Button variant="danger" onClick={() => onDelete(ticket)}>
           Delete
@@ -36,12 +37,16 @@ const buildColumns = (onDelete) => [
 
 function TicketsTable() {
   const [page, setPage] = useState(1)
+  const [ticketToView, setTicketToView] = useState(null)
   const [ticketToDelete, setTicketToDelete] = useState(null)
   const { data, isLoading, error } = useTickets(page)
   const deleteMutation = useDeleteTicket()
 
-  // setTicketToDelete never changes, so the columns are built only once
-  const columns = useMemo(() => buildColumns(setTicketToDelete), [])
+  // The state setters never change, so the columns are built only once
+  const columns = useMemo(
+    () => buildColumns({ onView: setTicketToView, onDelete: setTicketToDelete }),
+    [],
+  )
 
   const closeDeleteDialog = () => {
     setTicketToDelete(null)
@@ -74,6 +79,12 @@ function TicketsTable() {
         totalPages={data.pagination.totalPages}
         onPageChange={setPage}
       />
+      {ticketToView && (
+        <TicketDetailModal
+          ticketId={ticketToView.id}
+          onClose={() => setTicketToView(null)}
+        />
+      )}
       {ticketToDelete && (
         <ConfirmDialog
           title="Delete ticket"
