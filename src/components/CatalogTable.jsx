@@ -9,8 +9,8 @@ import ErrorMessage from './ErrorMessage'
 import Spinner from './Spinner'
 
 const buildColumns = ({ singular, onEdit, onDelete }) => [
-  { header: 'Code', render: (item) => item.code },
-  { header: 'Name', render: (item) => item.name },
+  { header: 'Code', sortKey: 'code', render: (item) => item.code },
+  { header: 'Name', sortKey: 'name', render: (item) => item.name },
   {
     header: 'Actions',
     className: 'text-right',
@@ -37,7 +37,8 @@ function CatalogTable({ catalog }) {
   // null = form closed; { item: null } = new item; { item } = edit that item
   const [form, setForm] = useState(null)
   const [itemToDelete, setItemToDelete] = useState(null)
-  const { data, isLoading, error } = useCatalog(catalog.id)
+  const [sort, setSort] = useState({ key: 'name', order: 'asc' })
+  const { data, isLoading, error } = useCatalog(catalog.id, { sort: sort.key, order: sort.order })
   const deleteMutation = useDeleteCatalogItem(catalog.id)
 
   const columns = useMemo(
@@ -49,6 +50,14 @@ function CatalogTable({ catalog }) {
       }),
     [catalog.singular],
   )
+
+  // Same column again: flips the order. Another column: starts ascending.
+  const handleSort = (key) => {
+    setSort((current) => ({
+      key,
+      order: current.key === key && current.order === 'asc' ? 'desc' : 'asc',
+    }))
+  }
 
   const closeDeleteDialog = () => {
     setItemToDelete(null)
@@ -74,6 +83,8 @@ function CatalogTable({ catalog }) {
         columns={columns}
         rows={data}
         getRowKey={(item) => item.id}
+        sort={sort}
+        onSort={handleSort}
         emptyMessage={`No ${catalog.label.toLowerCase()} found`}
       />
       {form && (
