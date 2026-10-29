@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createCatalogItem, updateCatalogItem } from '@/features/catalogs/api'
 import { ApiError } from '@/lib/apiClient'
+import ToastProvider from '@/components/ui/ToastProvider'
 import CatalogFormModal from '@/features/catalogs/components/CatalogFormModal'
 
 vi.mock('@/features/catalogs/api')
@@ -14,7 +15,9 @@ const renderForm = ({ item = null, onClose = vi.fn() } = {}) => {
   const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } })
   render(
     <QueryClientProvider client={queryClient}>
-      <CatalogFormModal catalog={catalog} item={item} onClose={onClose} />
+      <ToastProvider>
+        <CatalogFormModal catalog={catalog} item={item} onClose={onClose} />
+      </ToastProvider>
     </QueryClientProvider>,
   )
   return { onClose }
@@ -45,6 +48,36 @@ describe('CatalogFormModal', () => {
 
     await waitFor(() => expect(onClose).toHaveBeenCalled())
     expect(createCatalogItem).toHaveBeenCalledWith('suppliers', { code: 'SUP999', name: 'New Vendor' })
+  })
+
+  it('tells that the item was created', async () => {
+    renderForm()
+
+    await userEvent.type(screen.getByLabelText('Code'), 'SUP999')
+    await userEvent.type(screen.getByLabelText('Name'), 'New Vendor')
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+    expect(await screen.findByText('Supplier created')).toBeInTheDocument()
+  })
+
+  it('tells that the item was updated', async () => {
+    renderForm({ item: { id: 4, code: 'SUP004', name: 'Vendor Delta Co' } })
+
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+    expect(await screen.findByText('Supplier updated')).toBeInTheDocument()
+  })
+
+  it('does not tell anything when the save fails', async () => {
+    vi.mocked(createCatalogItem).mockRejectedValue(new ApiError(409, 'Supplier code already exists'))
+    renderForm()
+
+    await userEvent.type(screen.getByLabelText('Code'), 'SUP009')
+    await userEvent.type(screen.getByLabelText('Name'), 'Repeated')
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }))
+
+    await screen.findByRole('alert')
+    expect(screen.queryByText('Supplier created')).not.toBeInTheDocument()
   })
 
   it('has the data of the item when it is edited, and updates it', async () => {

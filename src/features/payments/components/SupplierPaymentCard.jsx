@@ -9,6 +9,7 @@ const buildColumns = (onViewTicket) => [
   { header: 'Total', className: 'text-right', render: (ticket) => formatCurrency(ticket.total) },
   {
     header: 'Detail',
+    mobileLabel: false,
     className: 'text-right',
     render: (ticket) => (
       <Button

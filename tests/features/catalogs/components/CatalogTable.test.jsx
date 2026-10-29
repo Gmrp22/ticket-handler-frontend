@@ -2,7 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { getCatalog } from '@/features/catalogs/api'
+import { deleteCatalogItem, getCatalog } from '@/features/catalogs/api'
+import ToastProvider from '@/components/ui/ToastProvider'
 import CatalogTable from '@/features/catalogs/components/CatalogTable'
 
 vi.mock('@/features/catalogs/api')
@@ -17,7 +18,9 @@ const renderTable = () => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   render(
     <QueryClientProvider client={queryClient}>
-      <CatalogTable catalog={catalog} />
+      <ToastProvider>
+        <CatalogTable catalog={catalog} />
+      </ToastProvider>
     </QueryClientProvider>,
   )
 }
@@ -39,7 +42,7 @@ describe('CatalogTable', () => {
     renderTable()
     await screen.findByRole('cell', { name: 'Vendor Beta' })
 
-    await userEvent.click(screen.getByRole('button', { name: /Name/ }))
+    await userEvent.click(within(screen.getByRole('table')).getByRole('button', { name: /Name/ }))
 
     expect(getCatalog).toHaveBeenLastCalledWith('suppliers', { sort: 'name', order: 'desc' })
   })
@@ -48,7 +51,7 @@ describe('CatalogTable', () => {
     renderTable()
     await screen.findByRole('cell', { name: 'Vendor Beta' })
 
-    await userEvent.click(screen.getByRole('button', { name: /Code/ }))
+    await userEvent.click(within(screen.getByRole('table')).getByRole('button', { name: /Code/ }))
 
     expect(getCatalog).toHaveBeenLastCalledWith('suppliers', { sort: 'code', order: 'asc' })
   })
@@ -59,6 +62,30 @@ describe('CatalogTable', () => {
 
     expect(within(row).getByRole('button', { name: 'Edit supplier SUP002' })).toBeInTheDocument()
     expect(within(row).getByRole('button', { name: 'Delete supplier SUP002' })).toBeInTheDocument()
+  })
+
+  it('asks for confirmation, deletes and tells it', async () => {
+    vi.mocked(deleteCatalogItem).mockResolvedValue(null)
+    renderTable()
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Delete supplier SUP002' }))
+    expect(deleteCatalogItem).not.toHaveBeenCalled()
+
+    await userEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Delete' }))
+
+    expect(await screen.findByText('Supplier deleted')).toBeInTheDocument()
+    expect(deleteCatalogItem).toHaveBeenCalledWith('suppliers', 2)
+  })
+
+  it('keeps the dialog and shows the error when the item cannot be deleted', async () => {
+    vi.mocked(deleteCatalogItem).mockRejectedValue(new Error('Supplier has tickets'))
+    renderTable()
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Delete supplier SUP002' }))
+    await userEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Delete' }))
+
+    expect(await within(screen.getByRole('dialog')).findByRole('alert')).toHaveTextContent('Supplier has tickets')
+    expect(screen.queryByText('Supplier deleted')).not.toBeInTheDocument()
   })
 
   it('shows the message of the API when the list fails', async () => {

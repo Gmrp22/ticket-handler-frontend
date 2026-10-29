@@ -23,6 +23,7 @@ const buildColumns = ({ onView, onEdit, onDelete }) => [
   },
   {
     header: 'Actions',
+    mobileLabel: false,
     className: 'text-right',
     render: (ticket) => (
       <div className="flex justify-end gap-2">

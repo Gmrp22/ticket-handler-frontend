@@ -13,6 +13,7 @@ const buildColumns = ({ singular, onEdit, onDelete }) => [
   { header: 'Name', sortKey: 'name', render: (item) => item.name },
   {
     header: 'Actions',
+    mobileLabel: false,
     className: 'text-right',
     render: (item) => (
       <div className="flex justify-end gap-2">

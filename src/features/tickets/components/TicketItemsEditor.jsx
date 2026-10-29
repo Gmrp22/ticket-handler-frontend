@@ -36,7 +36,7 @@ function TicketItemsEditor({ control, register, errors, products }) {
                   </select>
                 </FormField>
               </div>
-              <div className="col-span-4 sm:col-span-2">
+              <div className="col-span-6 sm:col-span-2">
                 <FormField label="Quantity" error={itemErrors?.quantity?.message}>
                   <input
                     type="number"
@@ -48,7 +48,7 @@ function TicketItemsEditor({ control, register, errors, products }) {
                   />
                 </FormField>
               </div>
-              <div className="col-span-4 sm:col-span-2">
+              <div className="col-span-6 sm:col-span-2">
                 <FormField label="Price" error={itemErrors?.price?.message}>
                   <input
                     type="number"
@@ -60,11 +60,11 @@ function TicketItemsEditor({ control, register, errors, products }) {
                   />
                 </FormField>
               </div>
-              <div className="col-span-3 mt-7 flex h-10 items-center justify-end text-base text-gray-900 sm:col-span-2">
-                <span className="sr-only">Subtotal: </span>
+              <div className="col-span-9 flex h-10 items-center text-base text-gray-900 sm:col-span-2 sm:mt-7 sm:justify-end">
+                <span className="mr-1 text-gray-700 sm:sr-only">Subtotal: </span>
                 {formatCurrency(Number.isNaN(subtotal) ? 0 : subtotal)}
               </div>
-              <div className="col-span-1 mt-7">
+              <div className="col-span-3 flex justify-end sm:col-span-1 sm:mt-7 sm:block">
                 <Button
                   aria-label={`Remove item ${index + 1}`}
                   disabled={fields.length === 1}

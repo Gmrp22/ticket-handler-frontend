@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import DataTable from '@/components/ui/DataTable'
@@ -35,18 +35,54 @@ describe('DataTable', () => {
 
   it('makes a header clickable only when the column has a sortKey', () => {
     renderTable({ sort: { key: 'code', order: 'asc' }, onSort: vi.fn() })
+    const table = within(screen.getByRole('table'))
 
-    expect(screen.getByRole('button', { name: /Code/ })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: /Name/ })).not.toBeInTheDocument()
+    expect(table.getByRole('button', { name: /Code/ })).toBeInTheDocument()
+    expect(table.queryByRole('button', { name: /Name/ })).not.toBeInTheDocument()
   })
 
   it('calls onSort with the key of the column', async () => {
     const onSort = vi.fn()
     renderTable({ sort: { key: 'date', order: 'desc' }, onSort })
 
-    await userEvent.click(screen.getByRole('button', { name: /Code/ }))
+    await userEvent.click(within(screen.getByRole('table')).getByRole('button', { name: /Code/ }))
 
     expect(onSort).toHaveBeenCalledWith('code')
+  })
+
+  describe('on small screens', () => {
+    it('has the sort buttons above the cards, only for sortable columns', async () => {
+      const onSort = vi.fn()
+      renderTable({ sort: { key: 'date', order: 'desc' }, onSort })
+
+      // The buttons of the table and the ones for small screens (the second one, outside the table)
+      const buttons = screen.getAllByRole('button', { name: /Code/ })
+      expect(buttons).toHaveLength(2)
+      expect(screen.queryAllByRole('button', { name: /Name/ })).toHaveLength(0)
+
+      await userEvent.click(buttons.find((button) => !screen.getByRole('table').contains(button)))
+      expect(onSort).toHaveBeenCalledWith('code')
+    })
+
+    it('does not show the sort buttons when onSort is not given', () => {
+      renderTable()
+
+      expect(screen.queryByText('Sort by')).not.toBeInTheDocument()
+    })
+
+    it('puts the name of the column in each cell, to use it as a label', () => {
+      renderTable()
+
+      expect(screen.getByRole('cell', { name: 'Vendor A' })).toHaveAttribute('data-label', 'Name')
+      expect(screen.getByRole('cell', { name: 'SUP001' })).toHaveAttribute('data-label', 'Code')
+    })
+
+    it('can leave a column without label', () => {
+      const withActions = [...columns, { header: 'Actions', mobileLabel: false, render: () => 'Edit' }]
+      renderTable({ columns: withActions })
+
+      expect(screen.getAllByRole('cell', { name: 'Edit' })[0]).not.toHaveAttribute('data-label')
+    })
   })
 
   it('tells the active order to screen readers', () => {
